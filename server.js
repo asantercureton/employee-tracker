@@ -1,6 +1,7 @@
 const express = require('express');
 const mysql = require('mysql2');
 const consoleTable = require('console.table');
+const inquirer = require('inquirer');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -20,7 +21,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // COMMAND-LINE PROMPTS
-// Run Application
 const startApp = () => {
   inquirer
     .prompt({
@@ -167,3 +167,6 @@ const deleteEmployee = () => {
     startApp();
   })
 }
+
+// Run Application
+startApp();
