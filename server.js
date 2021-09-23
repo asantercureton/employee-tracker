@@ -15,100 +15,155 @@ const db = mysql.createConnection(
   console.log(`Connected to the employees_db database.`)
 );
 
+app.use(express.static('public'));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 // COMMAND-LINE PROMPTS
 // Run Application
-const runApp = () => {
+const startApp = () => {
   inquirer
     .prompt({
-      name: "",
-      message: "",
-      type: "",
+      name: "Start Menu",
+      message: "Welcome to the Start Menu!",
+      type: "list",
       choices: [
+        "view all departments",
+        "view all roles",
+        "view all employees",
+        "add a department",
+        "add a role",
+        "add an employee",
+        "update an employee role",
       ]
     }).then(() => {
 
     })
 }
 
+// VIEW ALL DEPARTMENTS
+const viewAllDepts = () => {
+  db.query(`
+  SELECT * FROM departments`, function (err, depts) {
+    if (err) return console.log(err);
+    // DISPLAY QUERY OF DEPARTMENTS
+    console.table(depts);
+    // RESTART APP
+    startApp();
+  });
+}
+
+// VIEW ALL ROLES
+const viewAllRoles = () => {
+  db.query(`
+  SELECT * FROM roles`, function (err, roles) {
+    if (err) return console.log(err);
+    // DISPLAY QUERY OF ROLES
+    console.table(roles);
+    // RESTART APP
+    startApp();
+  });
+}
+
 // VIEW ALL EMPLOYEES
 const viewAllEmployees = () => {
   db.query(`
-  SELECT * FROM employee`, function (err, employees) {
+  SELECT * FROM employees`, function (err, employees) {
     if (err) return console.log(err);
     // DISPLAY QUERY OF EMPLOYEES
     console.table(employees);
-    runApp();
+    // RESTART APP
+    startApp();
   });
 }
 
-// VIEW ALL EMPLOYEES BY ROLE
-const viewAllRoles = () => {
-  let roleEmployee = [];
-
+// ADD A DEPARTMENT
+const addDept = () => {
   db.query(`
-  SELECT title FROM role`, function (err, roles) {
+  INSERT INTO departments (name) VALUE ('IT')`, function (err, newDept) {
     if (err) return console.log(err);
-    // DISPLAY QUERY OF EMPLOYEES BY ROLE
-    console.table(roles);
-    runApp();
+    console.log("New department added!");
+    // DISPLAY QUERY OF NEW DEPARTMENT
+    console.table(newDept);
+    // RESTART APP
+    startApp();
   });
 }
 
-// VIEW ALL EMPLOYEES BY DEPARTMENT
-const viewAllDepartments = () => {
-  let deptEmployee = [];
-
+// ADD A ROLE
+const addRole = () => {
   db.query(`
-  SELECT name FROM department`, function (err, depts) {
+  INSERT INTO roles (title, salary, department_id) VALUE ('Account Manager', 95000, 4)`, function (err, newRole) {
     if (err) return console.log(err);
-    // DISPLAY QUERY OF EMPLOYEES BY DEPARTMENT
-    console.table(depts);
-    runApp();
-  });
+    console.log("New role added!");
+    // DISPLAY QUERY OF NEW ROLE
+    console.table(newRole);
+    // RESTART APP
+    startApp();
+  })
 }
 
+// ADD AN EMPLOYEE
+const addEmployee = () => {
+  db.query(`
+  INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUE ('Cindy', 'Baker', 4, 0)`, function (err, newEmployee) {
+    if (err) return console.log(err);
+    console.log("New employee added!");
+    // DISPLAY QUERY OF NEW ROLE
+    console.table(newEmployee);
+    // RESTART APP
+    startApp();
+  })
+}
 
-// DELETE QUERIES FROM ROLE, DEPARTMENT, EMPLOYEE
-db.query(`
-  DELETE FROM role WHERE id = ?`, 2, function (err, results) {
-  console.log(results);
-});
+// UPDATE AN EMPLOYEE ROLE
+const updateRole = () => {
+  db.query(`
+  UPDATE roles SET title = "Web Developer" WHERE id = ?`, 3, function (err, updatedRole) {
+    if (err) return console.log(err);
+    console.log("Employee role updated!");
+    // DISPLAY QUERY OF UPDATED EMPLOYEE ROLE
+    console.table(updatedRole);
+    // RESTART APP
+    startApp();
+  })
+}
 
-db.query(`
-  DELETE FROM department WHERE id = ?`, 2, function (err, results) {
-  console.log(results);
-});
-db.query(`
-  
-  DELETE FROM employee WHERE id = ?`, 2, function (err, results) {
-  console.log(results);
-});
+// DELETE QUERY FROM DEPARTMENT
+const deleteDept = () => {
+  db.query(`
+  DELETE FROM departments WHERE id = ?`, 1, function (err, deletedDept) {
+    if (err) return console.log(err);
+    console.log("Employee role updated!");
+    // DISPLAY QUERY OF DELETED DEPARTMENT
+    console.table(deletedDept);
+    // RESTART APP
+    startApp();
+  })
+}
 
-// UPDATE QUERIES FROM ROLE, DEPARTMENT, EMPLOYEE
-db.query(`
-  UPDATE role SET title = "Manager" WHERE id = ?`, 1, function (err, results) {
-  console.log(results);
-});
+// DELETE QUERY FROM ROLE
+const deleteRole = () => {
+  db.query(`
+  DELETE FROM roles WHERE id = ?`, 2, function (err, deletedRole) {
+    if (err) return console.log(err);
+    console.log("Employee role updated!");
+    // DISPLAY QUERY OF DELETED ROLE
+    console.table(deletedRole);
+    // RESTART APP
+    startApp();
+  })
+}
 
-db.query(`
-  UPDATE department SET name = "Engineering" WHERE id = ?`, 1, function (err, results) {
-  console.log(results);
-});
-
-db.query(`
-  UPDATE employee SET first_name = "Bob" WHERE id = ?`, 1, function (err, results) {
-  console.log(results);
-});
-
-  // app.use(express.static('public'));
-  // app.use(express.urlencoded({ extended: true }));
-  // app.use(express.json());
-
-  // app.listen(PORT, () => {
-  //     console.log(`Server running on port http://localhost:${PORT}`);
-  // })
-
-  // app.use((req, res) => {
-  //     res.status(404).end();
-  //   });
+// DELETE QUERY FROM EMPLOYEE
+const deleteEmployee = () => {
+  db.query(`
+  DELETE FROM employees WHERE id = ?`, 5, function (err, deletedEmployee) {
+    if (err) return console.log(err);
+    console.log("Employee role updated!");
+    // DISPLAY QUERY OF DELETED EMPLOYEE
+    console.table(deletedEmployee);
+    // RESTART APP
+    startApp();
+  })
+}

@@ -16,10 +16,10 @@ VALUES ("Accountant", 95000, 2),
        
 INSERT INTO employee (`first_name`, `last_name`, `role_id`, `manager_id`)
 VALUES ("Karli", "Johnson", 1, 1),
-       ("Bart", "Lewis", 2, NULL),
+       ("Bart", "Lewis", 2, 0),
        ("Jeff", "Smith", 3, 3),
-       ("Mary", "Ann", 4, null),
-       ("Jennifer", "Button", 1, null),
+       ("Mary", "Ann", 4, 0),
+       ("Jennifer", "Button", 1, 0),
        ("Harvey", "Brown", 2, 2)
        ("Sarah", "Allen", 4, 4),
-       ("Mike", "Bennett", 3, null);
+       ("Mike", "Bennett", 3, 0);
