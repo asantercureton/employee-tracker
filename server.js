@@ -13,13 +13,13 @@ const db = mysql.createConnection(
     database: 'employees_db'
   },
   console.log(`Connected to the employees_db database.`)
-  );
-  
+);
 
-  // COMMAND-LINE PROMPTS
 
-  const runStart = () => {
-    inquirer
+// COMMAND-LINE PROMPTS
+// Run Application
+const runApp = () => {
+  inquirer
     .prompt({
       name: "",
       message: "",
@@ -29,81 +29,86 @@ const db = mysql.createConnection(
     }).then(() => {
 
     })
-  }
+}
 
-  const runStart = () => {
-    inquirer
-    .prompt({
-      name: "",
-      message: "",
-      type: "",
-      choices: [
-      ]
-    }).then(() => {
+// VIEW ALL EMPLOYEES
+const viewAllEmployees = () => {
+  db.query(`
+  SELECT * FROM employee`, function (err, employees) {
+    if (err) return console.log(err);
+    // DISPLAY QUERY OF EMPLOYEES
+    console.table(employees);
+    runApp();
+  });
+}
 
-    })
-  }
-  
-  // SELECT QUERIES FROM ROLE, DEPARTMENT, EMPLOYEE
+// VIEW ALL EMPLOYEES BY ROLE
+const viewAllRoles = () => {
+  let roleEmployee = [];
+
   db.query(`
-  SELECT * FROM role`, function (err, role) {
+  SELECT title FROM role`, function (err, roles) {
     if (err) return console.log(err);
-    console.table(role);
+    // DISPLAY QUERY OF EMPLOYEES BY ROLE
+    console.table(roles);
+    runApp();
   });
-  
+}
+
+// VIEW ALL EMPLOYEES BY DEPARTMENT
+const viewAllDepartments = () => {
+  let deptEmployee = [];
+
   db.query(`
-  SELECT * FROM department`, function (err, department) {
+  SELECT name FROM department`, function (err, depts) {
     if (err) return console.log(err);
-    console.table(department);
+    // DISPLAY QUERY OF EMPLOYEES BY DEPARTMENT
+    console.table(depts);
+    runApp();
   });
-  
-  db.query(`
-  SELECT * FROM employee`, function (err, employee) {
-    if (err) return console.log(err);
-    console.table(employee);
-  });
-  
-  
-  // DELETE QUERIES FROM ROLE, DEPARTMENT, EMPLOYEE
-  db.query(`
+}
+
+
+// DELETE QUERIES FROM ROLE, DEPARTMENT, EMPLOYEE
+db.query(`
   DELETE FROM role WHERE id = ?`, 2, function (err, results) {
-    console.log(results);
-  });
-  
-  db.query(`
+  console.log(results);
+});
+
+db.query(`
   DELETE FROM department WHERE id = ?`, 2, function (err, results) {
-    console.log(results);
-  });
-  db.query(`
+  console.log(results);
+});
+db.query(`
   
   DELETE FROM employee WHERE id = ?`, 2, function (err, results) {
-    console.log(results);
-  });
-  
-  // UPDATE QUERIES FROM ROLE, DEPARTMENT, EMPLOYEE
-  db.query(`
+  console.log(results);
+});
+
+// UPDATE QUERIES FROM ROLE, DEPARTMENT, EMPLOYEE
+db.query(`
   UPDATE role SET title = "Manager" WHERE id = ?`, 1, function (err, results) {
-    console.log(results);
-  });
-  
-  db.query(`
+  console.log(results);
+});
+
+db.query(`
   UPDATE department SET name = "Engineering" WHERE id = ?`, 1, function (err, results) {
-    console.log(results);
-  });
-  
-  db.query(`
+  console.log(results);
+});
+
+db.query(`
   UPDATE employee SET first_name = "Bob" WHERE id = ?`, 1, function (err, results) {
-    console.log(results);
-  });
-  
+  console.log(results);
+});
+
   // app.use(express.static('public'));
   // app.use(express.urlencoded({ extended: true }));
   // app.use(express.json());
-  
+
   // app.listen(PORT, () => {
   //     console.log(`Server running on port http://localhost:${PORT}`);
   // })
-  
+
   // app.use((req, res) => {
   //     res.status(404).end();
   //   });
