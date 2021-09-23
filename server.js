@@ -24,7 +24,7 @@ app.use(express.json());
 const startApp = () => {
   inquirer
     .prompt({
-      name: "Start Menu",
+      name: "startApp",
       message: "What would you like to do?",
       type: "list",
       choices: [
@@ -37,7 +37,7 @@ const startApp = () => {
         "update an employee role",
       ]
     }).then((selected) => {
-      switch (selected.action) {
+      switch (selected.startApp) {
         case "view all departments":
           viewAllDepts();
           break;
@@ -65,7 +65,12 @@ const startApp = () => {
         case "update an employee role":
           updateRole();
           break;
+
+        case "exit app":
+          console.log('CTRL+C ends the application');
+          break;
       };
+      return;
     });
 };
 
