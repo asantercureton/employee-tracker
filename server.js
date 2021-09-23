@@ -36,10 +36,38 @@ const startApp = () => {
         "add an employee",
         "update an employee role",
       ]
-    }).then(() => {
+    }).then((selected) => {
+        switch (selected.action) {
+          case "view all departments":
+            viewAllDepts();
+          break;
 
-    })
-}
+          case "view all roles":
+            viewAllRoles();
+          break;
+
+          case "view all employees":
+            viewAllEmployees();
+          break;
+
+          case "add a department":
+            addDept();
+          break;
+
+          case "add a role":
+            addRole();
+          break;
+
+          case "add an employee":
+            addEmployee();
+          break;
+
+          case "update an employee role":
+            updateRole();
+          break;
+        };
+    });
+};
 
 // VIEW ALL DEPARTMENTS
 const viewAllDepts = () => {
