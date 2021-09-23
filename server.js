@@ -1,5 +1,6 @@
 const express = require('express');
 const mysql = require('mysql2');
+const consoleTable = require('console.table');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -16,6 +17,32 @@ const db = mysql.createConnection(
   
 
   // COMMAND-LINE PROMPTS
+
+  const runStart = () => {
+    inquirer
+    .prompt({
+      name: "",
+      message: "",
+      type: "",
+      choices: [
+      ]
+    }).then(() => {
+
+    })
+  }
+
+  const runStart = () => {
+    inquirer
+    .prompt({
+      name: "",
+      message: "",
+      type: "",
+      choices: [
+      ]
+    }).then(() => {
+
+    })
+  }
   
   // SELECT QUERIES FROM ROLE, DEPARTMENT, EMPLOYEE
   db.query(`
