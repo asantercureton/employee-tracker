@@ -2,6 +2,7 @@ const express = require('express');
 const mysql = require('mysql2');
 const consoleTable = require('console.table');
 const inquirer = require('inquirer');
+const { restoreDefaultPrompts } = require('inquirer');
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -116,14 +117,15 @@ const viewAllEmployees = () => {
 const addDept = () => {
   inquirer
     .prompt({
-      name: " name",
+      name: "department",
       message: "Provide the department name you want to add.",
       type: "input",
     }).then((newDept) => {
       db.query(`
-      INSERT INTO department (name) VALUE ('IT')`, function (err) {
+      INSERT INTO department (name) VALUES (?)`, [newDept.department], 
+      function (err) {
         if (err) return console.log(err);
-        console.log("New department added!");
+        console.log(`New department ${newDept.name} added!`);
         // DISPLAY QUERY OF NEW DEPARTMENT
         console.table(newDept);
         // RESTART APP
@@ -134,71 +136,101 @@ const addDept = () => {
 
 // ADD A ROLE
 const addRole = () => {
-  inquirer
-    .prompt([
-      {
-        name: " title",
-        message: "Provide the title for this role.",
-        type: "input",
-      },
-      {
-        name: " salary",
-        message: "Provide the salary for this role.",
-        type: "number",
-      },
-      {
-        name: " department_id",
-        message: "Provide the department id for this role.",
-        type: "input",
-      },
-    ]).then((newRole) => {
-      db.query(`
-      INSERT INTO role (title, salary, department_id) VALUE ('Account Manager', 95000, 4)`, function (err) {
-        if (err) return console.log(err);
-        console.log("New role added!");
-        // DISPLAY QUERY OF NEW ROLE
-        console.table(newRole);
-        // RESTART APP
-        startApp();
-      })
-    });
+  db.query(`
+  SELECT * FROM department`, function (err, depts) {
+    if (err) return console.log(err);
+    inquirer
+      .prompt([
+        {
+          name: " title",
+          message: "Provide the title for this role.",
+          type: "input",
+        },
+        {
+          name: " salary",
+          message: "Provide the salary for this role.",
+          type: "input",
+        },
+        {
+          name: " department",
+          message: "Provide the department for this role.",
+          type: "list",
+          choices: depts.map(department =>
+          ({
+            name: department.name,
+            value: department.id
+          })
+          )
+        },
+      ]).then((newRole) => {
+        db.query(`
+        INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)`, [newRole.title, newRole.salary, newRole.department],
+          function (err) {
+            if (err) return console.log(err);
+            console.log(`New role ${newRole.title} added!`);
+            // DISPLAY QUERY OF NEW ROLE
+            console.table(newRole);
+            // RESTART APP
+            startApp();
+          })
+      });
+  });
 }
 
 // ADD AN EMPLOYEE
 const addEmployee = () => {
-  inquirer
-    .prompt([
-      {
-        name: " first_name",
-        message: "Provide the first name for this employee.",
-        type: "input",
-      },
-      {
-        name: " salary",
-        message: "Provide the last name for this employee.",
-        type: "input",
-      },
-      {
-        name: " role_id",
-        message: "Provide the role id for this employee.",
-        type: "input",
-      },
-      {
-        name: " manager_id",
-        message: "Provide the manager id for this employee.",
-        type: "input",
-      },
-    ]).then((newEmployee) => {
-      db.query(`
-      INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUE ('Cindy', 'Baker', 4, 0)`, function (err) {
-        if (err) return console.log(err);
-        console.log("New employee added!");
-        // DISPLAY QUERY OF NEW ROLE
-        console.table(newEmployee);
-        // RESTART APP
-        startApp();
-      })
-    });
+  db.query(`
+  SELECT * FROM employee`, function (err, employees) {
+    if (err) return console.log(err);
+    inquirer
+      .prompt([
+        {
+          name: " first_name",
+          message: "Provide the first name for this employee.",
+          type: "input",
+        },
+        {
+          name: " last_name",
+          message: "Provide the last name for this employee.",
+          type: "input",
+        },
+        {
+          name: " role",
+          message: "Provide the role for this employee.",
+          type: "list",
+          choices: employees[0].map(role => 
+            ({
+                name: role.title,
+                value: role.id
+            })
+          ),
+        },
+        {
+          name: " manager",
+          message: "Provide the manager this employee will report to.",
+          type: "list",
+          choices: () => { 
+            let map = employees[1].map(employee => ({
+              name: employee.first_name + ' ' + employee.last_name,
+              value: employee.id
+            }));
+            map.unshift({ name: 'None', value: null });
+            return map;
+          }
+        },
+      ]).then((newEmployee) => {
+        db.query(`
+        INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUE (?, ?, ?, ?)`, [newEmployee.firstName, newEmployee.lastName, newEmployee.role, newEmployee.manager], 
+        function (err) {
+          if (err) return console.log(err);
+          console.log(`New employee ${newEmployee.firstName} ${newEmployee.lastName} added!`);
+          // DISPLAY QUERY OF NEW ROLE
+          console.table(newEmployee);
+          // RESTART APP
+          startApp();
+        })
+      });
+  });
 }
 
 // UPDATE AN EMPLOYEE ROLE
