@@ -26,7 +26,7 @@ const startApp = () => {
     .prompt({
       name: "startApp",
       message: "What would you like to do?",
-      type: "list",
+      type: "rawlist",
       choices: [
         "view all departments",
         "view all roles",
@@ -35,6 +35,7 @@ const startApp = () => {
         "add a role",
         "add an employee",
         "update an employee role",
+        "exit app",
       ]
     }).then((selected) => {
       switch (selected.startApp) {
@@ -67,7 +68,7 @@ const startApp = () => {
           break;
 
         case "exit app":
-          console.log('CTRL+C ends the application');
+          process.exit();
           break;
       };
       return;
@@ -77,7 +78,7 @@ const startApp = () => {
 // VIEW ALL DEPARTMENTS
 const viewAllDepts = () => {
   db.query(`
-  SELECT * FROM departments`, function (err, depts) {
+  SELECT * FROM department`, function (err, depts) {
     if (err) return console.log(err);
     // DISPLAY QUERY OF DEPARTMENTS
     console.table(depts);
@@ -88,8 +89,9 @@ const viewAllDepts = () => {
 
 // VIEW ALL ROLES
 const viewAllRoles = () => {
+  let employeeRoles = [];
   db.query(`
-  SELECT * FROM roles`, function (err, roles) {
+  SELECT * FROM role`, function (err, roles) {
     if (err) return console.log(err);
     // DISPLAY QUERY OF ROLES
     console.table(roles);
@@ -101,10 +103,10 @@ const viewAllRoles = () => {
 // VIEW ALL EMPLOYEES
 const viewAllEmployees = () => {
   db.query(`
-  SELECT * FROM employees`, function (err, employees) {
+  SELECT * FROM employee`, function (err, employees) {
     if (err) return console.log(err);
     // DISPLAY QUERY OF EMPLOYEES
-    console.table(employees);
+    console.log(employees);
     // RESTART APP
     startApp();
   });
@@ -119,7 +121,7 @@ const addDept = () => {
       type: "input",
     }).then((newDept) => {
       db.query(`
-      INSERT INTO departments (name) VALUE ('IT')`, function (err) {
+      INSERT INTO department (name) VALUE ('IT')`, function (err) {
         if (err) return console.log(err);
         console.log("New department added!");
         // DISPLAY QUERY OF NEW DEPARTMENT
@@ -142,7 +144,7 @@ const addRole = () => {
       {
         name: " salary",
         message: "Provide the salary for this role.",
-        type: "input",
+        type: "number",
       },
       {
         name: " department_id",
@@ -151,7 +153,7 @@ const addRole = () => {
       },
     ]).then((newRole) => {
       db.query(`
-      INSERT INTO roles (title, salary, department_id) VALUE ('Account Manager', 95000, 4)`, function (err) {
+      INSERT INTO role (title, salary, department_id) VALUE ('Account Manager', 95000, 4)`, function (err) {
         if (err) return console.log(err);
         console.log("New role added!");
         // DISPLAY QUERY OF NEW ROLE
@@ -188,7 +190,7 @@ const addEmployee = () => {
       },
     ]).then((newEmployee) => {
       db.query(`
-      INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUE ('Cindy', 'Baker', 4, 0)`, function (err) {
+      INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUE ('Cindy', 'Baker', 4, 0)`, function (err) {
         if (err) return console.log(err);
         console.log("New employee added!");
         // DISPLAY QUERY OF NEW ROLE
