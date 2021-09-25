@@ -19,31 +19,40 @@ Designed a command-line application from scratch to manage a company's employee 
 
 
 ## Links
-<!-- [App Code](https://github.com/asantercureton/note-taker-app) -->
+[App Code](https://github.com/asantercureton/employee-tracker)
 
-<!-- [Video Recording](https://watch.screencastify.com/v/jPW68H8xQCSZNifrLZdp) -->
-
-<!-- [Heroku Link](https://aqueous-sea-76360.herokuapp.com/) -->
+[Video Recording](https://watch.screencastify.com/v/bcEH6IpfKxxVb7YbXZlt)
 
 ## Installation
-Run npm install at root directory.
+Run "npm install" at root directory
 
+Then run "mysql -u root"
+
+Then run "soucre db/schema.sql"
+
+Then run "source db/seeds.sql"
+
+Then run "exit" to create the database and seed the tables.
 
 ## Instructions
-Run npm start to intiate the note taker application and begin writing notes.
+Run "npm start" to intiate the employee tracker application.
 
 ## Usage
-Designed to allow a user to write and save important notes, so they do not forget about the tasks they need to do.
+Designed to allow a company manage a it's employee database and be more efficient with their employmee management system.
 
 ## Screenshots
 Below is a screenshot of the project:
 
-<!-- ![Image of html](./public/assets/images/note-taker.jpg) -->
+![Image of html](./assets/images/employee-tracker-start.jpg)
 
-<!-- ![Image of html](./public/assets/images/note-taker-2.jpg) -->
+![Image of html](./assets/images/employee-tracker-view-all.jpg)
+
+![Image of html](./assets/images/employee-tracker-add.jpg)
+
+![Image of html](./assets/images/employee-tracker-add-emp.jpg)
 
 ## License
-<!-- ![GitHub license](https://img.shields.io/badge/license-ISC-blue.svg) -->
+![GitHub license](https://img.shields.io/badge/license-ISC-blue.svg)
 
 ---
 © 2021 Employee Tracker App.
