@@ -245,7 +245,7 @@ const updateRole = () => {
     ]).then((res) => {
       const updateEmploy = res.updated_id;
       const selectNewRole = res.update_role;
-      db.query(`UPDATE employee SET role_id = "${selectNewRole}" WHERE id = ${updateEmploy}";`,
+      db.query(`UPDATE employee SET role_id = ${selectNewRole} WHERE id = ${updateEmploy};`,
         function (err) {
           if (err) return console.log(err);
           console.log(`New employee ${res.role_id} added!`);
